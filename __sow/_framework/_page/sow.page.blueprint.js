@@ -1,4 +1,12 @@
-﻿Sow.hook( "Manager" ).add( "onSginOut", function ( a ) {
+﻿/**
+* Copyright (c) 2018, SOW (https://www.facebook.com/safeonlineworld). (https://github.com/RKTUXYN) All rights reserved.
+* @author {SOW}
+* @description {sow.page.blueprint.js}
+* @example { }
+* Copyrights licensed under the New BSD License.
+* See the accompanying LICENSE file for terms.
+*/
+Sow.hook( "Manager" ).add( "onSginOut", function ( a ) {
 	location.href = "/sginout.aspx?task=auto";
 } );
 Sow.define( "Sow.store", function () {

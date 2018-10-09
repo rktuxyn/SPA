@@ -1,4 +1,12 @@
-﻿( function ( _pageWindow, $ ) {
+﻿/**
+* Copyright (c) 2018, SOW (https://www.facebook.com/safeonlineworld). (https://github.com/RKTUXYN)  All rights reserved.
+* @author {SOW}
+* @description {sow.web.template.js}
+* @example { }
+* Copyrights licensed under the New BSD License.
+* See the accompanying LICENSE file for terms.
+*/
+( function ( _pageWindow, $ ) {
 	if ( typeof ( Sow.define ) !== 'function'
 		|| typeof ( Sow.registerNamespace ) !== 'function' )
 		throw new Error( 'Sow.Web.Template.js couldn\'t be initilize. One of its dependency `sow.frameworkjs` or  sow.notify ' + ' couldn\t load properly... Please recheck..' );

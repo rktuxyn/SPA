@@ -1,4 +1,12 @@
-﻿//!#sow.net.web.page.model.js
+﻿/**
+* Copyright (c) 2018, SOW (https://www.facebook.com/safeonlineworld). (https://github.com/RKTUXYN)  All rights reserved.
+* @author {SOW}
+* @description {sow.net.web.page.model.js}
+* @example { }
+* Copyrights licensed under the New BSD License.
+* See the accompanying LICENSE file for terms.
+*/
+//!#sow.net.web.page.model.js
 ( function ( $, window ) {
 	Sow.usingNamespace( 'Sow.Net.Web' )
 		.registerNamespace(/**[settings]*/"Sow.Net.Web.Page.Renderer", function () {

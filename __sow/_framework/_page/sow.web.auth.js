@@ -1,4 +1,12 @@
-﻿Sow.Run( function () {
+﻿/**
+* Copyright (c) 2018, SOW (https://www.facebook.com/safeonlineworld). (https://github.com/RKTUXYN) All rights reserved.
+* @author {SOW}
+* @description {sow.web.auth.js}
+* @example { }
+* Copyrights licensed under the New BSD License.
+* See the accompanying LICENSE file for terms.
+*/
+Sow.Run( function () {
 	var _next = function ( next, n ) {
 		if ( next ) {
 			let r = Sow.getQuery( 'next' );

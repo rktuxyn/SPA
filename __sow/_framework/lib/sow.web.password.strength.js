@@ -1,4 +1,12 @@
-﻿( typeof window.Sow.define !== 'function'
+﻿/**
+* Copyright (c) 2018, SOW (https://www.facebook.com/safeonlineworld). (https://github.com/RKTUXYN) All rights reserved.
+* @author {SOW}
+* @description {sow.web.password.strength.js}
+* @example { }
+* Copyrights licensed under the New BSD License.
+* See the accompanying LICENSE file for terms.
+*/
+( typeof window.Sow.define !== 'function'
 || typeof window.Sow.registerNamespace !== 'function'
 ? console.error( 'sow.web.password.strength.js couldn\'t be initilize. One of its dependency `Sow.Frameworkjs` couldn\t load properly... Please re-try...' )
 : ( ( Sow.registerNamespace(/**[Namespace Name]*/'Sow.Web.Password.Strength', function () {

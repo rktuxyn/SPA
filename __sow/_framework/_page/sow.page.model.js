@@ -1,4 +1,12 @@
-﻿Sow.registerNamespace(/**[settings]*/'Sow.Net.Web.default', function () {
+﻿/**
+* Copyright (c) 2018, SOW (https://www.facebook.com/safeonlineworld). (https://github.com/RKTUXYN) All rights reserved.
+* @author {SOW}
+* @description {sow.page.model.js}
+* @example { }
+* Copyrights licensed under the New BSD License.
+* See the accompanying LICENSE file for terms.
+*/
+Sow.registerNamespace(/**[settings]*/'Sow.Net.Web.default', function () {
 	var isConnected = false;
 	return /**[modules]*/[{
 		//[Extend VIEW]

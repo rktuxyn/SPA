@@ -1,5 +1,11 @@
-/**======================================================================*/
-/** If window is Undefined*/
+/**
+* Copyright (c) 2018, SOW (https://www.facebook.com/safeonlineworld).  All rights reserved.
+* @author {SOW}
+* @description {sow.framework.js}
+* @example { }
+* Copyrights licensed under the New BSD License.
+* See the accompanying LICENSE file for terms.
+*/
 window !== 'undefined' ? '' : ( window = this );
 ( function ( global, factory ) {
 	if ( typeof ( module ) === "object" && typeof ( module.exports ) === "object" ) {

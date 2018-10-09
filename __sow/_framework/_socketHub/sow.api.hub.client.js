@@ -1,4 +1,12 @@
-﻿( function ( _pageWindow ) {
+﻿/**
+* Copyright (c) 2018, SOW (https://www.facebook.com/safeonlineworld). (https://github.com/RKTUXYN) All rights reserved.
+* @author {SOW}
+* @description {sow.api.hub.client.js}
+* @example { }
+* Copyrights licensed under the New BSD License.
+* See the accompanying LICENSE file for terms.
+*/
+( function ( _pageWindow ) {
 	if ( typeof Sow.define !== 'function'
 		|| typeof Sow.registerNamespace !== 'function'
 		|| typeof Sow.Notify !== 'object' ) {
