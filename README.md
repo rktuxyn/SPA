@@ -1,2 +1,2 @@
 # SPA
-Single Page Application (Javascripit &amp; C#)
+Single Page Application (Javascript &amp; C#)
