@@ -1,0 +1,129 @@
+﻿/**
+* Copyright (c) 2018, SOW (https://www.safeonline.world). (https://github.com/RKTUXYN) All rights reserved.
+* @author {SOW}
+* Copyrights licensed under the New BSD License.
+* See the accompanying LICENSE file for terms.
+*/
+//3:38 AM 12/13/2018
+let config = require( "/addon/web.conf.js" );
+let auth = require( "/addon/authentication.js", config.production );
+auth.init( context, config );
+let is_auth = auth.isAuthenticated();
+//is_auth = true;
+if ( !is_auth ) {
+    context.response.header( "x-response-error-code", "501" );
+} else {
+    class SQL {
+        static quote_Literal( value ) {
+            try {
+                if ( value === undefined || value === null ) return "";
+                if ( typeof ( value ) !== "string" )
+                    value = String( value );
+                value = value.replace( '\'', "''" );
+                return "''" + value + "''";
+            } catch ( e ) {
+                throw new Error( e.message + " " + value );
+            }
+        }
+        static parse_param( param, sql ) {
+            if ( !sql ) throw new Error( "SQL required!!!" );
+            sql = sql.replace( /\r\n/gi, "" ).replace( /\n/gi, "" ).replace( /\t/gi, " " ).replace( /\s+/g, " " );//normalize
+            if ( typeof ( param ) !== "object" )
+                return sql;
+            let len = param.length;
+            return sql.replace( /{(\d+)}/g, function ( match, number ) {
+                let index = parseInt( number );
+                if ( isNaN( index ) )
+                    throw new Error( "Invalid param index!!!" );
+
+                if ( index > len )
+                    throw new Error( "Index should not greater than " + len );
+
+                return typeof ( param[index] ) !== 'undefined'
+                    ? SQL.quote_Literal( param[index] )
+                    : /*match || ""*/SQL.quote_Literal( "" )
+                    ;
+            } );
+        }
+        static get_object() {
+            let so = {};
+            if ( context.request.method === "GET" ) {
+                so = context.request.query_string.sql_object;
+                if ( !so || so === null ) {
+                    context.response.header( "statuse_code", "505" );
+                    context.response.write( "sql_object required!!!" );
+                    return undefined;
+                } else {
+                    so = decodeURIComponent( so );
+                    so = JSON.parse( so );
+                }
+                if ( !so.sp ) {
+                    context.response.header( "statuse_code", "505" );
+                    context.response.write( "SP required!!!" );
+                    return undefined;
+                }
+                return so;
+            }
+            //__create_directory("\\post");
+            //let c = fs.write_file_from_payload( "post_data.txt" );
+            //context.response.header( "len", c.toString() );
+            //return undefined;
+            let payload = "";
+            so.count = 0;
+            context.request.read_payload( function ( buff, count ) {
+                payload += buff; so.count += count;
+            } );
+            /*context.response.header( "len", String( so.count) );
+            context.response.header( "payload", payload );
+            return undefined;*/
+            //let payload = context.request.pay_load;
+            let arr = payload.split( "&" );
+            if ( !arr || arr === null ) return undefined;
+            for ( let key of arr ) {
+                let karr = key.split( "=" );
+                if ( !karr || karr === null ) continue;
+                so[karr[0]] = decodeURIComponent( karr[1] );
+            }
+            so.form_object = JSON.parse( so.form_object );
+            if ( so.param ) {
+                so.param = JSON.parse( so.param );
+                if ( so.form_object.sql ) {
+                    so.form_object.sql = SQL.parse_param( so.param, so.form_object.sql );
+                }
+            }
+            return so;
+
+        }
+        static execute() {
+            let sql_object = SQL.get_object();
+            if ( !sql_object ) return;
+            context.response.header( "Content-Type", "application/json" );
+            try {
+                let resp = npgsql.execute_io( config.database.db_conn, sql_object.sp, JSON.stringify( auth.getUserInfo() ), sql_object.form_object ? ( typeof ( sql_object.form_object ) === 'object' ? JSON.stringify( sql_object.form_object ) : sql_object.form_object ) : JSON.stringify( "{}" ) );
+                let ret_val = parseInt( resp._ret_val );
+                ret_val = isNaN( ret_val ) ? 0 : ret_val;
+                if ( ret_val < 0 ) {
+                    context.response.write( JSON.stringify( {
+                        "ret_val": ret_val,
+                        "ret_msg": resp._ret_msg,
+                    } ) );
+                    return;
+                }
+                if ( resp._ret_data_table )
+                    context.response.as_gzip();
+                context.response.write( JSON.stringify( {
+                    "ret_val": ret_val,
+                    "ret_msg": resp._ret_msg,
+                    "ret_data_table": resp._ret_data_table
+                } ) );
+            } catch ( e ) {
+                context.response.write( JSON.stringify( {
+                    "ret_val": -1,
+                    "ret_msg": e.message,
+                    "ret_data_table": "{}"
+                } ) );
+            }
+        }
+    }
+    SQL.execute();
+}

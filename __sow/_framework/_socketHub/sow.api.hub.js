@@ -571,6 +571,5 @@
 				owner: 'Sow.Net.Hub.core'
 			}]
 		}, {/**[cache]*/ }, /**[entry]*/["hub core"]];
-
 	} );
 }( window || this, jQuery ) );

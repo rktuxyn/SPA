@@ -6,11 +6,23 @@
 * Copyrights licensed under the New BSD License.
 * See the accompanying LICENSE file for terms.
 */
-Sow.hook( "Manager" ).add( "onSginOut", function ( a ) {
+Sow.hook( "Manager" ).add( "onSginOut", function ( a, arg ) {
 	location.href = "/sginout.aspx?task=auto";
 } );
 Sow.define( "Sow.store", function () {
 	return ( new this.Data() ).export();
+} );
+Sow.define( "Sow", function () {
+    return {
+        check_privacy: function () {
+            let footer = $( '[data-footer-info]' ).html();
+            if ( !footer )
+                throw new Error( "No footer defined!!!" );
+            if ( footer.match( /Copyright © 2015-[^>]* <a href="https:\/\/www.safeonline.world" target="_blank">SOW<\/a>/ ) === null )
+                throw new Error( "No footer defined!!!" );
+            return footer;
+        }
+    };
 } );
 Sow.registerNamespace(/**[settings]*/'Sow.Net.Web', function () {
 	var HUBNAME = 'Manager';
@@ -24,7 +36,14 @@ Sow.registerNamespace(/**[settings]*/'Sow.Net.Web', function () {
 			//Sow.unloadNamespace('Sow.Net.Hub');
 			return module.aggregate( function () {
 				return {
-					ready: function () {
+                    ready: function () {
+                        try {
+                            Sow.check_privacy();
+                        } catch ( e ) {
+                            document.write( atob( 'PGgxIHN0eWxlPSJjb2xvcjpyZWQ7Ij5VbmFibGUgdG8gbG9hZCBtb2R1bGUuLi4uPC9oMT4=' ) );
+                            Sow.unloadNamespace( 'Sow.Net.Web' );
+                            return;
+                        }
 						require( 'Sow.Net.Route' ).ready( "Get Ready!!!" );
 						return this;
 					},
@@ -358,7 +377,13 @@ Sow.registerNamespace(/**[settings]*/'Sow.Net.Web', function () {
 							return { msg: "", error: false };
 						},
 						type: this.aggregate( function () {
-							var t_work = {
+                            var t_work = {
+                                white_space: function ( value ) {
+                                    if ( !value ) return false;
+                                    if ( value.match( /\s+/g ) )
+                                        return false;
+                                    return true;
+                                },
 								email: function ( value, key ) {
 									if ( /^[\w\-\.\+]+\@[a-zA-Z0-9\.\-]+\.[a-zA-z0-9]{2,4}$/.test( value ) ) {
 										return true;
@@ -383,7 +408,8 @@ Sow.registerNamespace(/**[settings]*/'Sow.Net.Web', function () {
 								mixed/*[specialCharacter]*/: function ( val ) {
 									return /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/.test( val ) !== true;
 								},
-							}, message = {
+                            }, message = {
+                                white_space: "White space not allowed!!!",
 								email: "Email should be the real one!!!",
 								mobile: "Mobile number should be the real one!!!",
 								numeric: "Numeric required !!!",
