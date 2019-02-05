@@ -1,4 +1,4 @@
-﻿/**
+/**
 * Copyright (c) 2018, SOW (https://safeonline.world, https://www.facebook.com/safeonlineworld, https://github.com/RKTUXYN)  All rights reserved.
 * @author {SOW}
 * @description {sow.net.web.page.model.js}
